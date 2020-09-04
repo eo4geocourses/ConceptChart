@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" >
+
+	<head>
+		<meta charset="utf-8">
+		 
+		<title>Aida's Beautiful Chart</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" type="text/javascript"> </script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.bundle.min.js"></script>
+		
+	</head>
+ 
+	<body>
+		
+	
+		
+		<script type="text/javascript">
+		
+		/*
+			//code for reading in a csv from GitHub - and splitting into fields. not yet adapted to our csv.
+		
+			jQuery.ajax({
+			url: "https://raw.githubusercontent.com/eo4geocourses/metadata_scraper/master/metadata_presentations.csv",
+			type: 'get',
+			dataType: 'text',
+			success: function(data) {
+				let lines = data.split('\n');
+				let fields = lines[0].split(',');
+        
+				let output = [];
+				
+				for(let i = 1; i < lines.length; i++){
+				   let current = lines[i].split(',');
+				   let doc = {};
+				   for(let j = 0; j < fields.length; j++){
+					   doc[fields[j]] = current[j];
+				   }
+				   output.push(doc);
+				}       
+				
+				console.log(output);
+			},
+			error: function(jqXHR, textStatus, errorThrow){
+				console.log(textStatus);
+			}
+			});
+			*/
+	
+			
+			var statistics = [{"id":1, "code":"AM - Analytical Methods","value":31,"count":4},{"id":1, "code":"GD - Geospatial Data","value":15,"count":2},{"id":1, "code":"IP - Image processing and analysis","value":23,"count":3},
+						  {"id":2,"code":"TA - Thematic and application domains","value":8,"count":1},{"id":2,"code":"WB - Web-based GI","value":23,"count":5}, {"id": 2, "code":"AM - Analytical Methods","value":31,"count":7},
+						  {"id":3,"code":"GD - Geospatial Data","value":15,"count":2},{"id":3, "code":"IP - Image processing and analysis","value":23,"count":4},
+						  {"id":3,"code":"TA - Thematic and application domains","value":8,"count":15},{"id":3,"code":"WB - Web-based GI","value":23,"count":3} ]; 
+			
+			
+			
+			var idurl;
+		
+			function getIDfromURL() {
+				const queryString = window.location.search;
+				const urlParams = new URLSearchParams(queryString);
+
+				idurl = urlParams.get('id');
+				console.log(idurl);
+				return idurl;
+			 }
+			 
+				
+			const dataToGraph = [];
+			const colorsToGraph = [];
+			const labelsToGraph = [];
+
+			function generateData () {
+		
+				getIDfromURL();	
+				
+				statistics.forEach(st => 
+				{if (st.id == idurl) {
+				dataToGraph.push(st.count)}});
+				console.log(idurl);
+				console.log (dataToGraph);
+				return dataToGraph;
+				
+			};
+			
+			function getColor(code) {
+				const colors = {
+				  'bok-GI': '#40e0d0',
+				  'bok-IP': '#1f77b4',
+				  'bok-CF': '#aec7e8',
+				  'bok-CV': '#ff7f0e',
+				  'bok-DA': '#ffbb78',
+				  'bok-DM': '#2ca02c',
+				  'bok-DN': '#98df8a',
+				  'bok-PS': '#d62728',
+				  'bok-GD': '#cc5b59',
+				  'bok-GS': '#9467bd',
+				  'bok-AM': '#8c564b',
+				  'bok-MD': '#8c564b',
+				  'bok-OI': '#c49c94',
+				  'bok-GC': '#e377c2',
+				  'bok-PP': '#f7b6d2',
+				  'bok-SD': '#7f7f7f',
+				  'bok-SH': '#c7c7c7',
+				  'bok-TA': '#bcbd22',
+				  'bok-WB': '#07561e',
+				  'bok-no': '#17becf',
+				};
+				
+				return colors['bok-' + code];
+			} 
+			
+			function generateColor() {
+				getIDfromURL();		
+				statistics.forEach(st => 
+				{if (st.id == idurl){
+				colorsToGraph.push(this.getColor(st.code.slice(0, 2)))}});
+				console.log(colorsToGraph);
+				return colorsToGraph;
+			};
+			
+			function generateLabels() {
+				getIDfromURL();	
+			
+				statistics.forEach(st => 
+				{if (st.id == idurl){
+				labelsToGraph.push(st.code)
+				}});
+				return labelsToGraph;
+			};
+			
+			 var config = {
+				type: 'doughnut',
+				data: {
+				datasets: [{
+				  data: generateData(),
+				  backgroundColor: generateColor()	  
+				}],
+				labels: generateLabels()
+			  },
+			  options: {
+					responsive: true, legend: { position: 'top', }, 
+					title: { display: true, text: 'Chart.js Doughnut Chart for OBIA Intro' }, animation: { animateScale: true, animateRotate: true } 
+			  }
+				
+			}; 
+			//dummy values for the second chart (test only)
+			var config2 = {
+				type: 'doughnut',
+			data: {
+			datasets: [{
+			  data: [3,7],
+			  backgroundColor: ['#40e0d0', '#c49c94' ]	  
+			}],
+			labels: ['AM', 'GC']
+		  },
+		  options: {
+				responsive: true, legend: { position: 'top', }, 
+				title: { display: true, text: 'Chart.js Doughnut Chart for OBIA Intro' }, animation: { animateScale: true, animateRotate: true } 
+		  }
+			
+		}; 
+			
+			//window.onload = function() { var ctx = document.getElementById('doughnut').getContext('2d'); window.myDoughnut = new Chart(ctx, config ); 
+			//	var ctx2 = document.getElementById('doughnut2').getContext('2D'); window.myDoughnut = new Chart (ctx2, config2);}; 
+			
+			window.onload = function()  {		 
+			 var ctx = document.getElementById('doughnut').getContext('2d'); window.myDoughnut = new Chart(ctx, config ); 
+		     var ctx2 = document.getElementById('doughnut2').getContext('2d'); window.myDoughnut = new Chart(ctx2, config2);
+			 }; 
+					
+		</script>
+		
+		<div>
+			<canvas id="doughnut" width="800" height="200" style="height: 0" ></canvas>
+		</div>
+		
+		<div>
+			<canvas id="doughnut2" width="800" height="200" style="height: 0" ></canvas>
+		</div>
+		
+			
+
+	</body>
+</html>	
