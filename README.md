@@ -5,3 +5,5 @@ Usage: to generate a chart for a specific set of input data, you need to set an 
 Possible values for id at the moment: 1,2,3
 
 https:/../../ConceptChart.html?id=2
+
+Test link: https://eo4geocourses.github.io/ConceptChart/ConceptChart.html?id=2 
