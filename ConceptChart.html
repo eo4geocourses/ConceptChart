@@ -20,36 +20,8 @@
 		
 		<script type="text/javascript">
 		
-		/*
-			//code for reading in a csv from GitHub - and splitting into fields. not yet adapted to our csv.
-		
-			jQuery.ajax({
-			url: "https://raw.githubusercontent.com/eo4geocourses/metadata_scraper/master/metadata_presentations.csv",
-			type: 'get',
-			dataType: 'text',
-			success: function(data) {
-				let lines = data.split('\n');
-				let fields = lines[0].split(',');
-        
-				let output = [];
-				
-				for(let i = 1; i < lines.length; i++){
-				   let current = lines[i].split(',');
-				   let doc = {};
-				   for(let j = 0; j < fields.length; j++){
-					   doc[fields[j]] = current[j];
-				   }
-				   output.push(doc);
-				}       
-				
-				console.log(output);
-			},
-			error: function(jqXHR, textStatus, errorThrow){
-				console.log(textStatus);
-			}
-			});
-			*/
-	
+			//[{"TA": 2, "GS": 1, "ID": "PLUS_Practice-Image-Processing"}, {"TA": 2, "GS": 1, "ID": "VITO_Data_Access_In_Terrascope"}, {"OI": 3, "ID": "GISIG_Introduction_to_EO4GEO"}, {"TA": 17, "IP": 3, "PS": 2, "GD": 4, "CV": 1, "AM": 1, "ID": "SpaSe_OBIA-for-Operations-Copernicus-Service-Challenge-Practical-Example"}, {"TA": 2, "GS": 1, "ID": "UT-ITC_Satellite_Data_Classification_Random_Forests"}, {"TA": 2, "GS": 1, "ID": "UT-ITC_Satellite_Data_Classification_Decision_Trees"}, {"DM": 2, "GD": 1, "AM": 3, "CF": 1, "CV": 1, "ID": "UNEP-GRID_Introduction-to-GIS"}, {"OI": 1, "ID": "KULeuven_Management-View-on-SDI"}, {"": 3, "ID": "UNIBAS_Remote-Sensing-Environment"}, {"GC": 1, "IP": 1, "ID": "UJI_Reproducible-Research-Practices-in-Geosciences"}, {"IP": 3, "ID": "PLUS_OBIA-Introduction"}]
+			
 			
 			var statistics = [{"id":1, "code":"AM - Analytical Methods","value":31,"count":4},{"id":1, "code":"GD - Geospatial Data","value":15,"count":2},{"id":1, "code":"IP - Image processing and analysis","value":23,"count":3},
 						  {"id":2,"code":"TA - Thematic and application domains","value":8,"count":1},{"id":2,"code":"WB - Web-based GI","value":23,"count":5}, {"id": 2, "code":"AM - Analytical Methods","value":31,"count":7},
