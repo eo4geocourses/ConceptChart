@@ -20,24 +20,43 @@
 		
 		<script type="text/javascript">
 		
-			//[{"TA": 2, "GS": 1, "ID": "PLUS_Practice-Image-Processing"}, {"TA": 2, "GS": 1, "ID": "VITO_Data_Access_In_Terrascope"}, {"OI": 3, "ID": "GISIG_Introduction_to_EO4GEO"}, {"TA": 17, "IP": 3, "PS": 2, "GD": 4, "CV": 1, "AM": 1, "ID": "SpaSe_OBIA-for-Operations-Copernicus-Service-Challenge-Practical-Example"}, {"TA": 2, "GS": 1, "ID": "UT-ITC_Satellite_Data_Classification_Random_Forests"}, {"TA": 2, "GS": 1, "ID": "UT-ITC_Satellite_Data_Classification_Decision_Trees"}, {"DM": 2, "GD": 1, "AM": 3, "CF": 1, "CV": 1, "ID": "UNEP-GRID_Introduction-to-GIS"}, {"OI": 1, "ID": "KULeuven_Management-View-on-SDI"}, {"": 3, "ID": "UNIBAS_Remote-Sensing-Environment"}, {"GC": 1, "IP": 1, "ID": "UJI_Reproducible-Research-Practices-in-Geosciences"}, {"IP": 3, "ID": "PLUS_OBIA-Introduction"}]
+		//var jsonData;
+		//funtion to load JSON file that is created after metadata scraping
+		function loadJSON(file,callback) {   
+		  var xobj = new XMLHttpRequest();
+		  xobj.overrideMimeType('application/json');
+		  xobj.open('GET', file, true); 
+		  xobj.onreadystatechange = function () {
+			if (xobj.readyState == 4 && xobj.status == '200') {
+			// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+			  callback(xobj.responseText);
+			 }
+		  };
+		  xobj.send(null);  
+		}
+		
+		
+		//load JSON points to GitHub file in this draft code
+		loadJSON('https://raw.githubusercontent.com/eo4geocourses/metadata_scraper/rdfa_scraping/graphs/meatadata_presentations.json', function(text){
+			var statistics = JSON.parse(text);
+			//statistics = JSON.stringify(statistics);
 			
+			generateData(statistics);
+			generateColor(statistics);
+			generateLabels(statistics);
 			
-			var statistics = [{"id":1, "code":"AM - Analytical Methods","value":31,"count":4},{"id":1, "code":"GD - Geospatial Data","value":15,"count":2},{"id":1, "code":"IP - Image processing and analysis","value":23,"count":3},
-						  {"id":2,"code":"TA - Thematic and application domains","value":8,"count":1},{"id":2,"code":"WB - Web-based GI","value":23,"count":5}, {"id": 2, "code":"AM - Analytical Methods","value":31,"count":7},
-						  {"id":3,"code":"GD - Geospatial Data","value":15,"count":2},{"id":3, "code":"IP - Image processing and analysis","value":23,"count":4},
-						  {"id":3,"code":"TA - Thematic and application domains","value":8,"count":15},{"id":3,"code":"WB - Web-based GI","value":23,"count":3}, {"id":4, "code":"IP - Image processing and analysis","value":23,"count":4} ]; 
+			var ctx = document.getElementById('doughnut').getContext('2d'); 
+			window.myDoughnut = new Chart(ctx, config); 
+		
+		} );
 			
-			
-			
-			var idurl;
+	
+			var idurl = "";
 		
 			function getIDfromURL() {
 				const queryString = window.location.search;
 				const urlParams = new URLSearchParams(queryString);
-
 				idurl = urlParams.get('id');
-				console.log(idurl);
 				return idurl;
 			 }
 			 
@@ -46,15 +65,12 @@
 			const colorsToGraph = [];
 			const labelsToGraph = [];
 
-			function generateData () {
+			function generateData (statistics) {
 		
 				getIDfromURL();	
-				
 				statistics.forEach(st => 
-				{if (st.id == idurl) {
+				{if (st.ID == idurl) {
 				dataToGraph.push(st.count)}});
-				console.log(idurl);
-				console.log (dataToGraph);
 				return dataToGraph;
 				
 			};
@@ -86,20 +102,19 @@
 				return colors['bok-' + code];
 			} 
 			
-			function generateColor() {
+			function generateColor(statistics) {
 				getIDfromURL();		
 				statistics.forEach(st => 
-				{if (st.id == idurl){
+				{if (st.ID == idurl){
 				colorsToGraph.push(this.getColor(st.code.slice(0, 2)))}});
-				console.log(colorsToGraph);
 				return colorsToGraph;
 			};
 			
-			function generateLabels() {
+			function generateLabels(statistics) {
 				getIDfromURL();	
 			
 				statistics.forEach(st => 
-				{if (st.id == idurl){
+				{if (st.ID == idurl){
 				labelsToGraph.push(st.code)
 				}});
 				return labelsToGraph;
@@ -109,10 +124,10 @@
 				type: 'doughnut',
 				data: {
 				datasets: [{
-				  data: generateData(),
-				  backgroundColor: generateColor()	  
+				  data: dataToGraph,
+				  backgroundColor: colorsToGraph
 				}],
-				labels: generateLabels()
+				labels: labelsToGraph  
 			  },
 			  options: {
 					responsive: true, legend: { position: 'top', }, 
@@ -120,31 +135,7 @@
 			  }
 				
 			}; 
-			//dummy values for the second chart (test only)
-			/*
-			var config2 = {
-				type: 'doughnut',
-			data: {
-			datasets: [{
-			  data: [3,7],
-			  backgroundColor: ['#40e0d0', '#c49c94' ]	  
-			}],
-			labels: ['AM', 'GC']
-		  },
-		  options: {
-				responsive: true, legend: { position: 'top', }, 
-				title: { display: true, text: 'Chart.js Doughnut Chart for OBIA Intro' }, animation: { animateScale: true, animateRotate: true } 
-		  }
-			
-		}; 
-			*/
-			//window.onload = function() { var ctx = document.getElementById('doughnut').getContext('2d'); window.myDoughnut = new Chart(ctx, config ); 
-			//	var ctx2 = document.getElementById('doughnut2').getContext('2D'); window.myDoughnut = new Chart (ctx2, config2);}; 
-			
-			window.onload = function()  {		 
-			 var ctx = document.getElementById('doughnut').getContext('2d'); window.myDoughnut = new Chart(ctx, config ); 
-		       //var ctx2 = document.getElementById('doughnut2').getContext('2d'); window.myDoughnut = new Chart(ctx2, config2);
-			 }; 
+		
 					
 		</script>
 		
@@ -152,12 +143,6 @@
 			<canvas id="doughnut" width="800" height="200"  ></canvas>
 		</div>
 		
-		<!--
-		<div>
-			<canvas id="doughnut2" width="800" height="200"  ></canvas>
-		</div>
-		-->
-			
 
 	</body>
 </html>	
