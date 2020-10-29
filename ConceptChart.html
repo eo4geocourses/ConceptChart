@@ -130,7 +130,7 @@
 				labels: labelsToGraph  
 			  },
 			  options: {
-					responsive: true, legend: { position: 'top', }, 
+					responsive: true, maintainAspectRatio: false, legend: { position: 'top', }, 
 					title: { display: true, text: 'BoK Concept Chart' }, animation: { animateScale: true, animateRotate: true } 
 			  }
 				
@@ -139,8 +139,8 @@
 					
 		</script>
 		
-		<div style="height: 100px; width:300px;">
-			<canvas id="doughnut" width="300" height="100"  ></canvas>
+		<div>
+			<canvas id="doughnut" width="300" height="300"  ></canvas>
 		</div>
 		
 
